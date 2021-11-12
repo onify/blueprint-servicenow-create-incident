@@ -51,11 +51,32 @@ headers.Authorization = authToken;
 next(null, headers);
 </camunda:script>
             </camunda:inputParameter>
-            <camunda:inputParameter name="url">${environment.output.serviceNowSettings._servicenow_url}/table/incident?sysparm_fields=sys_id%2Cnumber</camunda:inputParameter>
+            <camunda:inputParameter name="url">${environment.output.serviceNowSettings._servicenow_url}/api/now/table/incident?sysparm_fields=sys_id%2Cnumber</camunda:inputParameter>
           </camunda:inputOutput>
           <camunda:connectorId>httpRequest</camunda:connectorId>
         </camunda:connector>
         <camunda:inputOutput>
+          <camunda:inputParameter name="state">
+            <camunda:map>
+              <camunda:entry key="id">${content.id}</camunda:entry>
+              <camunda:entry key="name">${content.name}</camunda:entry>
+            </camunda:map>
+          </camunda:inputParameter>
+          <camunda:outputParameter name="state">
+            <camunda:script scriptFormat="js">next(null, {
+    id: content.id, 
+    result: {
+        done: true,
+        error: false,
+        skipped: false,
+        statuscode: 200,
+statusmessage: `Incident ${content.output.body.result.number} created`,
+link: `${environment.output.serviceNowSettings._servicenow_url}/nav_to.do?uri=incident.do?sys_id=${content.output.body.result.sys_id}`,
+link_text: 'View incident in ServiceNow'
+    }
+});
+</camunda:script>
+          </camunda:outputParameter>
           <camunda:outputParameter name="output">${content.output.body.result}</camunda:outputParameter>
           <camunda:outputParameter name="createTicketResponse">${content.output.body.result}</camunda:outputParameter>
         </camunda:inputOutput>
