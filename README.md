@@ -28,7 +28,7 @@ This simple little Blueprint shows how to create a incident in ServiceNow using 
 
 * Replace `<ONIFY-HUB-API-URL>` with Onify Hub API url
 * Replace `<AUTH-TOKEN>` with Onify Hub API auth token
-* Replace `<SERVICENOW-INSTANCE>` with ServiceNow instance url
+* Replace `<SERVICENOW-INSTANCE>` with ServiceNow instance url (https://devXXXXXX.service-now.com)
 * Replace `<SERVICENOW-USERNAME>` with ServiceNow instance username
 * Replace `<SERVICENOW-PASSWORD>` with ServiceNow instance password
 
