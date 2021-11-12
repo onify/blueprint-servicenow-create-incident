@@ -1,0 +1,37 @@
+{
+  "name": "@onify/blueprint-servicenow-create-ticket",
+  "version": "0.0.1",
+  "description": "Onify Blueprint: Create incident in ServiceNow",
+  "scripts": {
+    "test": "mocha",
+    "posttest": "eslint . --cache"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onify/blueprint-servicenow-create-ticket.git"
+  },
+  "keywords": [
+    "onify",
+    "blueprint",
+    "servicenow"
+  ],
+  "author": {
+    "name": "Onify",
+    "url": "https://github.com/onify"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/onify/blueprint-servicenow-create-ticket/issues"
+  },
+  "homepage": "https://github.com/onify/blueprint-servicenow-create-ticket#readme",
+  "devDependencies": {
+    "@onify/flow-validator": "^0.0.1",
+    "chai": "^4.3.4",
+    "cron": "^1.8.2",
+    "eslint": "^7.22.0",
+    "mocha": "^8.3.2"
+  },
+  "files": [
+    "salesforce-generate-access-token.bpmn"
+  ]
+}
