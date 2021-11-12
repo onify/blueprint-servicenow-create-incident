@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1m70y72" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.0">
+  <bpmn:process id="blueprint-servicenow-create-incident" name="Onify Blueprint: Create ticket in ServiceNow" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Start">
+      <bpmn:outgoing>Flow_06q3881</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_07hul8z" name="End">
+      <bpmn:incoming>Flow_1eyj76c</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_06q3881" sourceRef="StartEvent_1" targetRef="get-settings" />
+    <bpmn:serviceTask id="get-settings" name="Get ServiceNow settings">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="query">
+              <camunda:map>
+                <camunda:entry key="tag">servicenow</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="url">/my/config/settings</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>onifyApiRequest</camunda:connectorId>
+        </camunda:connector>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="serviceNowOffset">0</camunda:outputParameter>
+          <camunda:outputParameter name="serviceNowSettings">${content.output.body}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_06q3881</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ptsx40</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="create-incident" name="Create incident in ServiceNow">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="throwHttpErrors">${true}</camunda:inputParameter>
+            <camunda:inputParameter name="json">
+              <camunda:map>
+                <camunda:entry key="short_description">Hello</camunda:entry>
+                <camunda:entry key="description">Hello world!</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="responseType">json</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:script scriptFormat="js">let settings = environment.output.serviceNowSettings;
+let headers = {};
+let authToken = 'Basic ' + Buffer.from(settings._servicenow_username + ':' + settings._servicenow_password).toString('base64');
+headers.Authorization = authToken;
+
+next(null, headers);
+</camunda:script>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="url">${environment.output.serviceNowSettings._servicenow_url}/table/incident?sysparm_fields=sys_id%2Cnumber</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>httpRequest</camunda:connectorId>
+        </camunda:connector>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="output">${content.output.body.result}</camunda:outputParameter>
+          <camunda:outputParameter name="createTicketResponse">${content.output.body.result}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ptsx40</bpmn:incoming>
+      <bpmn:outgoing>Flow_1eyj76c</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1ptsx40" sourceRef="get-settings" targetRef="create-incident" />
+    <bpmn:sequenceFlow id="Flow_1eyj76c" sourceRef="create-incident" targetRef="Event_07hul8z" />
+    <bpmn:textAnnotation id="TextAnnotation_02ody8f">
+      <bpmn:text>Create ticket "Hello" incident</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_01nw462" sourceRef="create-incident" targetRef="TextAnnotation_02ody8f" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="blueprint-servicenow-create-incident">
+      <bpmndi:BPMNShape id="TextAnnotation_02ody8f_di" bpmnElement="TextAnnotation_02ody8f">
+        <dc:Bounds x="500" y="80" width="170" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_06q3881_di" bpmnElement="Flow_06q3881">
+        <di:waypoint x="188" y="207" />
+        <di:waypoint x="230" y="207" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ptsx40_di" bpmnElement="Flow_1ptsx40">
+        <di:waypoint x="330" y="207" />
+        <di:waypoint x="400" y="207" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1eyj76c_di" bpmnElement="Flow_1eyj76c">
+        <di:waypoint x="500" y="207" />
+        <di:waypoint x="572" y="207" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="189" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="159" y="232" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_00qst75_di" bpmnElement="get-settings">
+        <dc:Bounds x="230" y="167" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1k0k463_di" bpmnElement="create-incident">
+        <dc:Bounds x="400" y="167" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_07hul8z_di" bpmnElement="Event_07hul8z">
+        <dc:Bounds x="572" y="189" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="580" y="232" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_01nw462_di" bpmnElement="Association_01nw462">
+        <di:waypoint x="486" y="167" />
+        <di:waypoint x="537" y="110" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
