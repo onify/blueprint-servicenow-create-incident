@@ -25,11 +25,11 @@
   },
   "homepage": "https://github.com/onify/blueprint-servicenow-create-ticket#readme",
   "devDependencies": {
-    "@onify/flow-validator": "^0.0.1",
+    "@onify/flow-validator": "0.0.2",
     "chai": "^4.3.4",
     "cron": "^1.8.2",
-    "eslint": "^7.22.0",
-    "mocha": "^8.3.2"
+    "eslint": "^8.2.0",
+    "mocha": "^9.1.3"
   },
   "files": [
     "salesforce-generate-access-token.bpmn"
