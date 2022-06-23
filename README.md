@@ -7,7 +7,7 @@
 
 This simple little Blueprint shows how to create a incident in ServiceNow using ServiceNow API.
 
-![Onify Blueprint: Create incident in ServiceNow](flow.png "Flow")
+![Onify Blueprint: Create incident in ServiceNow](blueprint.jpg "Blueprint")
 
 ## Requirements
 
